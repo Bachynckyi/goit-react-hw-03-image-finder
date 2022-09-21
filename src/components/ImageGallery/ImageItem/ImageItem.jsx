@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import css from './ImageItem.module.css';
 
 export const ImageItem = ({smallURL, largeURL, tags }) => {
