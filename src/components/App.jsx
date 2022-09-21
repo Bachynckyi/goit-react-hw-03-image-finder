@@ -27,7 +27,7 @@ export class App extends Component {
   }
 
   render() {
-    const { dataImages, isLoading } = this.state;
+    const { dataImages } = this.state;
     return (
       <div
         style={{
