@@ -1,5 +1,7 @@
 import { SearchBar } from "./SearchBar/SearchBar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
+import { Button } from "./Button/Button";
+import { Loader } from "./Loader/Loader";
 import { Component } from "react";
 import * as API from '../services/API';
 export class App extends Component {
@@ -7,21 +9,27 @@ export class App extends Component {
     query: "",
     dataImages: [],
     isLoading: false,
-    page: "1"
+    page: 1,
+    total: null,
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if(prevState.query !== this.state.query)
+    if(prevState.query !== this.state.query || prevState.page !== this.state.page)
     try {    
         this.setState({isLoading: true});
         const data = await API.fetchData(this.state.query, this.state.page);
+        if(data.totalHits === 0) {
+          alert("There is no matches");
+          this.setState({isLoading: false});
+          return;
+        }
         setTimeout(() => {
-          this.setState(state => ({dataImages: [...state.dataImages, ...data.hits], isLoading:false}));
+          this.setState(state => ({dataImages: [...state.dataImages, ...data.hits], isLoading:false, total: data.totalHits}));
         }, 1000);
 
       }
       catch(error) {
-        console.log(error)
+        console.log(error => ({ error, isLoading: false }));
       }
   }
 
@@ -30,8 +38,14 @@ export class App extends Component {
     window.scrollTo({ top: 0, left: 0 });
   }
 
+  loadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  }
+
   render() {
-    const { dataImages } = this.state;
+    const { dataImages, total, } = this.state;
     return (
       <div 
         style={{
@@ -45,8 +59,13 @@ export class App extends Component {
         }}
       >
         <SearchBar onSubmit={this.handleformSubmit}/>
-        {this.state.isLoading && <h1>Загрузочка</h1>}
-        {dataImages.length > 0 && (<ImageGallery dataImages={dataImages} />)}
+        {dataImages.length > 0 && (
+        <>
+          <ImageGallery dataImages={dataImages}/>
+          {dataImages.length < total ? (<Button onClick={this.loadMore}/>) : ("")}
+        </>
+        )}
+        {this.state.isLoading && <Loader/>}
       </div>
     );
   }

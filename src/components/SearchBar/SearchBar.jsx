@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import css from './SearchBar.module.css';
 import { Component } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 export class SearchBar extends Component {
     state = {
@@ -27,7 +28,7 @@ export class SearchBar extends Component {
             <header className={css.Searchbar}>
                 <form className={css.SearchForm} onSubmit={this.handleSubmit}>
                     <button type="submit" className={css.SearchFormButton}>
-                        <span className={css.SearchFormButtonLabel}>Search</span>
+                        <FaSearch size='26' />
                     </button>
                     <input
                         onChange={this.handleNameChange}
