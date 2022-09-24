@@ -2,6 +2,7 @@ import { SearchBar } from "./SearchBar/SearchBar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
 import { Loader } from "./Loader/Loader";
+import { Modal } from "./Modal/Modal";
 import { Component } from "react";
 import * as API from '../services/API';
 export class App extends Component {
@@ -11,7 +12,8 @@ export class App extends Component {
     isLoading: false,
     page: 1,
     total: null,
-  }
+    largeImage: null,
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     if(prevState.query !== this.state.query || prevState.page !== this.state.page)
@@ -31,21 +33,29 @@ export class App extends Component {
       catch(error) {
         console.log(error => ({ error, isLoading: false }));
       }
-  }
+  };
 
   handleformSubmit = newQuery => {
     this.setState({query: newQuery, dataImages: [], page: 1});
     window.scrollTo({ top: 0, left: 0 });
-  }
+  };
 
   loadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-  }
+  };
 
+  toggleModal = () => {
+    this.setState({largeImage: null})
+  };
+
+  onLargeImage = newOnLargeImage => {
+    this.setState({ largeImage: newOnLargeImage });
+  };
+  
   render() {
-    const { dataImages, total, } = this.state;
+    const { dataImages, total, largeImage} = this.state;
     return (
       <div 
         style={{
@@ -61,11 +71,12 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleformSubmit}/>
         {dataImages.length > 0 && (
         <>
-          <ImageGallery dataImages={dataImages}/>
+          <ImageGallery dataImages={dataImages} onLargeImage={this.onLargeImage}/>
           {dataImages.length < total ? (<Button onClick={this.loadMore}/>) : ("")}
         </>
         )}
         {this.state.isLoading && <Loader/>}
+        {largeImage && (<Modal onClose={this.toggleModal} largeImage={largeImage}/>)}
       </div>
     );
   }

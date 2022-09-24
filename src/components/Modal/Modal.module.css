@@ -20,3 +20,7 @@
     max-height: calc(100vh - 24px);
   }
   
+  .largeImage {
+    width: 800px;
+    height: 500px;
+  }

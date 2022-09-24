@@ -3,12 +3,13 @@ import css from './ImageGallery.module.css';
 import PropTypes from 'prop-types';
 import { ImageItem } from './ImageItem/ImageItem';
 
-export const ImageGallery = ({ dataImages }) => {
+export const ImageGallery = ({ dataImages, onLargeImage }) => {
     return(
         <ul className={css.ImageGallery}>
             {dataImages.map( dataImage => {
                 return (
                 <ImageItem
+                onLargeImage={onLargeImage}
                 key={dataImage.id}
                 smallURL={dataImage.webformatURL}
                 largeURL={dataImage.largeImageURL}

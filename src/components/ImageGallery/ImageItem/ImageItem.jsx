@@ -2,9 +2,14 @@
 import css from './ImageItem.module.css';
 import PropTypes from 'prop-types';
 
-export const ImageItem = ({smallURL, largeURL, tags }) => {
+export const ImageItem = ({smallURL, largeURL, tags, onLargeImage }) => {
     return(
-        <li className={css.ImageGalleryItem}>
+        <li className={css.ImageGalleryItem} onClick={() =>
+            onLargeImage({
+              largeURL: largeURL,
+              alt: tags,
+            })
+          }>
             <img src={smallURL} alt={tags} />
         </li>
     );
