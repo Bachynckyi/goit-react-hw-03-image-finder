@@ -36,6 +36,9 @@ export class App extends Component {
   };
 
   handleformSubmit = newQuery => {
+    if(this.state.query === newQuery) {
+      return; 
+    }
     this.setState({query: newQuery, dataImages: [], page: 1});
     window.scrollTo({ top: 0, left: 0 });
   };
